@@ -1,2 +1,2 @@
 # crc-proj1
-First project for Complex Network Course
+First project for Complex Networks Course
