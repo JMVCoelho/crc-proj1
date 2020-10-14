@@ -51,8 +51,8 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
         fit.power_law.plot_pdf(color='r', linestyle='--', label='fit pdf')
 
         fig.savefig(path_to_save)
-
         return fit.power_law.alpha
 
+    fig.savefig(path_to_save)
     return
 
