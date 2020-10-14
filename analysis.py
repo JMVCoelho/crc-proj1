@@ -1,12 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import networkx as nx
+import statistics
 
 from plots import plots
 
 # read file
 file = "data/business-projection.edges"
-g = nx.read_edgelist(file, delimiter=' ', create_using=nx.DiGraph)
+g = nx.read_edgelist(file, delimiter=' ', create_using=nx.Graph)
 
 
 # stats for each node
@@ -32,15 +33,16 @@ if weighted:
 
 
 # 3. Degree Centrality
-degree_centrality       = nx.degree_centrality(g)
+degree_centrality    = nx.degree_centrality(g)
 stats['Degree']      = [v for k, v in degree_centrality.items()]
+
 functions_todo = ['Degree']
 
 if directed:
-    in_degree_centrality = nx.in_degree_centrality(g)
-    out_degree_centrality = nx.out_degree_centrality(g)
-    stats['In-Degree']   = [v for k, v in in_degree_centrality.items()]
-    stats['Out-Degree']  = [v for k, v in out_degree_centrality.items()]
+    in_degree_centrality    = nx.in_degree_centrality(g)
+    out_degree_centrality   = nx.out_degree_centrality(g)
+    stats['In-Degree']      = [v for k, v in in_degree_centrality.items()]
+    stats['Out-Degree']     = [v for k, v in out_degree_centrality.items()]
 
     functions_todo = ['Degree', 'In-Degree', 'Out-Degree']
 
@@ -56,20 +58,69 @@ for function in functions_todo:
     distribution['Probability'] = distribution['Frequency'] / sum
     distribution.head(10)
 
-    alpha = plots.create_plot("plots/degree_distribution.pdf", function + " distribution",
+    alpha = plots.create_plot("plots/businessProj_degree_distribution.pdf", function + " distribution",
                         function, distribution[function],
                         "Probability", distribution['Probability'],
                         yticks = [0, 0.001, 0.002, 0.003, 0.007],
                         also_log_scale = True, log_yticks = [1e-5, 1e-4, 1e-3, 1e-2, 1e-1],
                         powerlaw_xmin=1e1, powerlaw_xmax=1e4)
     plt.show()
-    print(function + ' distribution alpha= ', alpha)
+    print(function + ' distribution gamma= ', alpha)
 
 
-# 3. Weighted Degree Centrality
+# 4. Weighted Degree Centrality
 if weighted:
     # TODO
     pass
 
 
+# 5. Strongly connected components
+if directed:
+    scc = nx.strongly_connected_components(g)
+    print("It has", len(scc), "strongly connected components")
+    for c in scc:
+        print(">>", c)
 
+# 6. Clustering coefficient
+edge_attribute_for_weight = None # it should be a string
+
+clustering_coefficients = nx.clustering(g, weight=edge_attribute_for_weight)
+stats['Clustering']     = [v for k, v in clustering_coefficients.items()]
+
+# how many nodes with clustering 1?
+max_clustering_nodes = [k for k,v in clustering_coefficients.items() if v == 1.0]
+print("Nodes with clustering 1.0:", len(max_clustering_nodes))
+print(max_clustering_nodes)
+
+# how many nodes with clustering 0.5?
+med_clustering_nodes = [k for k,v in clustering_coefficients.items() if 0.48 < v < 0.52]
+print("Nodes with clustering 0.5:", len(med_clustering_nodes))
+print(med_clustering_nodes)
+
+# how many nodes with clustering 0?
+min_clustering_nodes = [k for k,v in clustering_coefficients.items() if v == 0.0]
+print("Nodes with clustering 0.0:", len(min_clustering_nodes))
+print(min_clustering_nodes)
+
+
+# Clustering distribution
+distribution = stats.groupby(['Clustering']).size().reset_index(name='Frequency')
+sum = distribution['Frequency'].sum()
+distribution['Probability'] = distribution['Frequency'] / sum
+
+plots.create_plot("plots/businessProj_clustering_distribution.pdf", "Clustering coefficient distribution",
+                  "Clustering coefficient", distribution['Clustering'],
+                  "Probability", distribution['Probability'])
+plt.show()
+
+# Average Clustering, <C>
+average_clustering = statistics.mean(clustering_coefficients.items())
+print("Average Clustering Coefficient, <C> =", average_clustering)
+
+
+
+
+
+
+output = open("stats.txt", 'w')
+print(stats, file=output)
