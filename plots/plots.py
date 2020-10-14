@@ -6,7 +6,7 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 
-def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel: str, ydata: list, yticks: list = None,
+def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel: str, ydata: list, xticks:list = None, yticks: list = None, discrete=True,
                 also_log_scale: bool = False, log_yticks: list = None, powerlaw_xmin=None, powerlaw_xmax=None):
     fig = plt.figure()
     fig.set_size_inches(14.0, 14.0)
@@ -17,9 +17,14 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
     plt.title(title + ' (linear scale)' if also_log_scale else '')
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    ax.set_xscale('linear')
+    ax.set_yscale('linear')
     if yticks:
         ax.set_ylim(ymin=yticks[0], ymax=yticks[len(yticks) - 1])
         ax.set_yticks(yticks)
+    if xticks:
+        ax.set_xlim(xmin=xticks[0], xmax=xticks[len(xticks) - 1])
+        ax.set_xticks(xticks)
     plt.grid()
 
     # Plot in log scale
@@ -37,17 +42,17 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
         ax.get_yaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
         plt.grid()
 
-    # Plot power law
-    if powerlaw_xmin and powerlaw_xmax:
-        fit = powerlaw.Fit(xdata + 1, xmin=powerlaw_xmin, xmax=powerlaw_xmax, discrete=True)
-    else:
-        fit = powerlaw.Fit(xdata + 1, discrete=True)
+        # Plot power law
+        if powerlaw_xmin and powerlaw_xmax:
+            fit = powerlaw.Fit(xdata + 1, xmin=powerlaw_xmin, xmax=powerlaw_xmax, discrete=discrete)
+        else:
+            fit = powerlaw.Fit(xdata + 1, discrete=True)
 
-    fit.power_law.plot_pdf(color='r', linestyle='--', label='fit pdf')
+        fit.power_law.plot_pdf(color='r', linestyle='--', label='fit pdf')
 
-    fig.savefig(path_to_save)
+        fig.savefig(path_to_save)
 
-    if also_log_scale:
         return fit.power_law.alpha
+
     return
 

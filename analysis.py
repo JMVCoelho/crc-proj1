@@ -123,8 +123,80 @@ print("Average Clustering Coefficient, <C> =", average_clustering)
 
 
 
+# 7. Average Path Length
+edge_attribute_for_weight = None # it should be a string
+
+average_shortest_path_length = nx.average_shortest_path_length(g, weight=edge_attribute_for_weight)
+print("Average Shortest Path Length, <L> =", average_shortest_path_length)
+
+
+# 8. Eigenvector Centrality
+edge_attribute_for_weight = None # it should be a string
+
+eigenvector_centrality  = nx.eigenvector_centrality(g, weight=edge_attribute_for_weight)
+stats['Eigenvector']    = [v for k, v in eigenvector_centrality.items()]
+
+# top 20 nodes with highest eigenvector rating
+print(stats.sort_values(by='Eigenvector', ascending=False).head(20))
+
+# Distribution
+distribution = stats.groupby(['Eigenvector']).size().reset_index(name='Frequency')
+sum = distribution['Frequency'].sum()
+distribution['Probability'] = distribution['Frequency'] / sum
+
+# TODO aqui ficava melhor um histograma para ter noção da "classe alta"
+plots.create_plot("plots/businessProj_eigenvector_distribution.pdf", "Eigenvector centrality distribution",
+                  'Eigenvector', distribution['Eigenvector'],
+                   "Probability", distribution['Probability'],
+                  xticks = [0, 0.01, 0.02, 0.03, 0.04, 0.042], yticks = [0, 0.001], discrete=False)
+plt.show()
+
+
+# 9. Katz Centrality
+edge_attribute_for_weight = None # it should be a string
+
+katz_centrality  = nx.katz_centrality(g, alpha=0.1, beta=1.0, weight=edge_attribute_for_weight) # FIXME alpha, beta
+stats['Katz']    = [v for k, v in katz_centrality.items()]
+
+# top 20 nodes with highest katz rating
+print(stats.sort_values(by='Katz', ascending=False).head(20))
+
+# Distribution
+distribution = stats.groupby(['Katz']).size().reset_index(name='Frequency')
+sum = distribution['Frequency'].sum()
+distribution['Probability'] = distribution['Frequency'] / sum
+
+plots.create_plot("plots/businessProj_katz_distribution.pdf", "Katz centrality distribution",
+                  'Katz', distribution['Katz'],
+                   "Probability", distribution['Probability'],
+                  xticks = [0, 0.01, 0.02, 0.03, 0.04, 0.042], yticks = [0, 0.001], discrete=False) # FIXME boundaries
+plt.show()
+
+
+# 10. Page Rank
+edge_attribute_for_weight = None # it should be a string
+
+if directed:
+    pageRank_centrality = nx.pagerank(g, alpha=0.85, weight=edge_attribute_for_weight)
+    stats['Page Rank']  = [v for k, v in pageRank_centrality.items()]
+
+    # top 20 nodes with highest page rank
+    print(stats.sort_values(by='Page Rank', ascending=False).head(20))
+
+    # Distribution
+    distribution = stats.groupby(['Page Rank']).size().reset_index(name='Frequency')
+    sum = distribution['Frequency'].sum()
+    distribution['Probability'] = distribution['Frequency'] / sum
+
+    plots.create_plot("plots/businessProj_pageRank_distribution.pdf", "Page Rank distribution",
+                      'Page Rank value', distribution['Page Rank'],
+                       "Probability", distribution['Probability'],
+                      xticks = [0, 0.01, 0.02, 0.03, 0.04, 0.042], yticks = [0, 0.001], discrete=False) # FIXME boundaries
+    plt.show()
 
 
 
-output = open("stats.txt", 'w')
-print(stats, file=output)
+
+
+output_path = "stats.csv"
+stats.to_csv(output_path, sep=' ')
