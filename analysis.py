@@ -67,6 +67,10 @@ for function in functions_todo:
     plt.show()
     print(function + ' distribution gamma= ', alpha)
 
+    # Average Degree, <k>, <k_in>, <k_out>
+    average = statistics.mean(stats[function])
+    print("Average", function, "=", average)
+
 
 # 4. Weighted Degree Centrality
 if weighted:
