@@ -50,7 +50,7 @@ def create_projections(bipartite_path: str, nodes_path: str, name: str):
     return None
 
 
-create_projections('bipartite-user-business.edges', 'users-node-list.users', 'user-projection')
-create_projections('bipartite-user-business.edges', 'business-node-list.business', 'business-projection')
 
+#create_projections('bipartite-user-business.edges', 'users-node-list.users', 'user-projection')
+#create_projections('bipartite-user-business.edges', 'business-node-list.business', 'business-projection')
 exit(0)
