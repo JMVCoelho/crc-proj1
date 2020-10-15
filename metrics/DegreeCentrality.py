@@ -10,7 +10,7 @@ import os
 
 class DegreeCentrality(Metric):
 
-    def __init__(self, graph, weighted=False, directed=False, edge_attribute_for_weight=None, n_nodes=None):
+    def __init__(self, graph, weighted=False, directed=False, edge_attribute_for_weight='weight', n_nodes=None):
         super().__init__(graph, weighted, directed, edge_attribute_for_weight)
         self.n_nodes = n_nodes
 

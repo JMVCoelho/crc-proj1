@@ -4,7 +4,7 @@ import networkx as nx
 
 
 class EdgesAndNodes(Metric):
-    def __init__(self, graph, weighted=False, directed=False, edge_attribute_for_weight=None):
+    def __init__(self, graph, weighted=False, directed=False, edge_attribute_for_weight='weight'):
         super().__init__(graph, weighted, directed, edge_attribute_for_weight)
 
     def compute(self, stats, name, pr=True):
