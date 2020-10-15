@@ -12,6 +12,7 @@ class SCC(Metric):
         super().__init__(graph, weighted, directed, edge_attribute_for_weight)
 
     def compute(self, stats, name, pr=True):
+        scc = None
         if self.directed:
 
             if not os.path.exists('pickle/' + name + 'scc.pickle'):
@@ -28,3 +29,5 @@ class SCC(Metric):
             for c in scc:
                 if pr:
                     print(">>", c)
+
+        return scc
