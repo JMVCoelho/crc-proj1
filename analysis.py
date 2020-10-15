@@ -268,10 +268,10 @@ def analysis(path_to_graph, report_name, directed, weighted,
             stats = ClusteringCoefficient(g, weighted=weighted, directed=directed).compute(stats=stats, name=report_name, pr=print)
 
         if apl:
-            AveragePathLength(g, weighted=weighted, directed=directed).compute(stats=stats, name=report_name)
+            AveragePathLength(g, weighted=weighted, directed=directed).compute(stats=stats, name=report_name, pr=print)
 
         if scc:
-            SCC(g, weighted=weighted, directed=directed).compute(stats=stats, name=report_name)
+            SCC(g, weighted=weighted, directed=directed).compute(stats=stats, name=report_name, pr=print)
 
     except Exception as e:
         stats.to_csv(stats_path, sep=' ')

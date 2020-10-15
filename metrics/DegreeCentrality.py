@@ -76,7 +76,9 @@ class DegreeCentrality(Metric):
                                       also_log_scale=True, log_yticks=[1e-5, 1e-4, 1e-3, 1e-2, 1e-1],
                                       powerlaw_xmin=1e1, powerlaw_xmax=1e4)
 
-            plt.show()
+            if pr:
+                plt.show()
+
 
             alphas[function] = alpha
 

@@ -51,7 +51,9 @@ class ClusteringCoefficient(Metric):
         plots.create_plot("plots/" + name + "_clustering_distribution.pdf", "Clustering coefficient distribution",
                           "Clustering coefficient", distribution['Clustering'],
                           "Probability", distribution['Probability'])
-        #plt.show()
+        if pr:
+            plt.show()
+
 
         # Average Clustering, <C>
         coefs = []
