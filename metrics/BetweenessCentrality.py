@@ -15,7 +15,7 @@ class BetweennessCentrality(Metric):
 
         if not os.path.exists('pickle/' + name + 'betweenness_centrality.pickle'):
             betweenness_centrality = nx.betweenness_centrality(self.graph,
-                                                 weight=self.edge_attribute_for_weight)  # FIXME alpha, beta
+                                                 weight=self.edge_attribute_for_weight)
             with open('pickle/' + name + 'betweenness_centrality.pickle', 'wb') as output:
                 pickle.dump(betweenness_centrality, output, pickle.HIGHEST_PROTOCOL)
 
