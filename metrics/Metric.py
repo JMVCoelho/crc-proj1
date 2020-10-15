@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class Metric(ABC):
 
-    def __init__(self, graph, weighted, directed, edge_attribute_for_weight):
+    def __init__(self, graph, weighted, directed, edge_attribute_for_weight=None):
         super().__init__()
         self.graph = graph
         self.weighted = weighted

@@ -219,6 +219,5 @@ if directed:
 
 
 
-
 output_path = "stats.csv"
 stats.to_csv(output_path, sep=' ')
