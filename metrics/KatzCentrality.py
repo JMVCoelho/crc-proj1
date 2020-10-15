@@ -8,7 +8,7 @@ import os
 
 
 class KatzCentrality(Metric):
-    def __init__(self, graph, weighted=False, directed=False, edge_attribute_for_weight=None):
+    def __init__(self, graph, weighted=False, directed=False, edge_attribute_for_weight='weight'):
         super().__init__(graph, weighted, directed, edge_attribute_for_weight)
 
     def compute(self, stats, name, pr=True):
@@ -39,5 +39,7 @@ class KatzCentrality(Metric):
                           "Probability", distribution['Probability'],
                           xticks=[0, 0.01, 0.02, 0.03, 0.04, 0.042], yticks=[0, 0.001],
                           discrete=False)  # FIXME boundaries
-        #plt.show()
+        if pr:
+            plt.show()
+
         return stats
