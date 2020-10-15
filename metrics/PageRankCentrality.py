@@ -38,5 +38,5 @@ class PageRankCentrality(Metric):
                               "Probability", distribution['Probability'],
                               xticks=[0, 0.01, 0.02, 0.03, 0.04, 0.042], yticks=[0, 0.001],
                               discrete=False)  # FIXME boundaries
-            plt.show()
+            #plt.show()
             return stats
