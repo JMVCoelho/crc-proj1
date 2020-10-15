@@ -30,13 +30,32 @@ class DegreeCentrality(Metric):
         functions_todo = ['Degree']
 
         if self.directed:
-            in_degree_centrality = nx.in_degree_centrality(self.graph)
-            out_degree_centrality = nx.out_degree_centrality(self.graph)
+            if not os.path.exists('pickle/' + name + 'in_degree_centrality.pickle'):
+                in_degree_centrality = nx.in_degree_centrality(self.graph)
+                with open('pickle/' + name + 'in_degree_centrality.pickle', 'wb') as output:
+                    pickle.dump(in_degree_centrality, output, pickle.HIGHEST_PROTOCOL)
+
+            else:
+                with open('pickle/' + name + 'in_degree_centrality.pickle', 'rb') as dc:
+                    in_degree_centrality = pickle.load(dc)
+
+            if not os.path.exists('pickle/' + name + 'out_degree_centrality.pickle'):
+                out_degree_centrality = nx.out_degree_centrality(self.graph)
+                with open('pickle/' + name + 'out_degree_centrality.pickle', 'wb') as output:
+                    pickle.dump(out_degree_centrality, output, pickle.HIGHEST_PROTOCOL)
+
+            else:
+                with open('pickle/' + name + 'out_degree_centrality.pickle', 'rb') as dc:
+                    out_degree_centrality = pickle.load(dc)
+
+
             stats['In-Degree'] = [v for k, v in in_degree_centrality.items()]
             stats['Out-Degree'] = [v for k, v in out_degree_centrality.items()]
 
             functions_todo = ['Degree', 'In-Degree', 'Out-Degree']
 
+        averages = dict()
+        alphas = dict()
         for function in functions_todo:
             # un-normalize
             stats[function] = round(stats[function] * (self.n_nodes - 1))
@@ -56,13 +75,18 @@ class DegreeCentrality(Metric):
                                       yticks=[0, 0.001, 0.002, 0.003, 0.007],
                                       also_log_scale=True, log_yticks=[1e-5, 1e-4, 1e-3, 1e-2, 1e-1],
                                       powerlaw_xmin=1e1, powerlaw_xmax=1e4)
-            #plt.show()
+
+            plt.show()
+
+            alphas[function] = alpha
+
             if pr:
                 print(function + ' distribution gamma= ', alpha)
 
             # Average Degree, <k>, <k_in>, <k_out>
             average = statistics.mean(stats[function])
+            averages[function] = average
             if pr:
                 print("Average", function, "=", average)
 
-        return stats
+        return stats, alphas, averages

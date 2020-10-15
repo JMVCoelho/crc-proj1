@@ -22,4 +22,7 @@ class AveragePathLength(Metric):
             with open('pickle/' + name + '_average_path_length.pickle', 'rb') as dc:
                 average_shortest_path_length = pickle.load(dc)
 
-        print("Average Shortest Path Length, <L> =", average_shortest_path_length)
+        if pr:
+            print("Average Shortest Path Length, <L> =", average_shortest_path_length)
+
+        return average_shortest_path_length

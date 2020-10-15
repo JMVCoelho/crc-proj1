@@ -40,7 +40,7 @@ def create_projections(bipartite_path: str, nodes_path: str, name: str):
     data = pd.read_csv(nodes_path, delim_whitespace=True, names=['nodes', 'types'])
     nodes = data.nodes.to_list()
 
-    projection = nx.bipartite.projected_graph(B, nodes)
+    projection = nx.bipartite.weighted_projected_graph(B, nodes)
 
     if len(projection) > 0:
         nx.write_edgelist(projection, name + '.edges', data=False)

@@ -61,4 +61,4 @@ class ClusteringCoefficient(Metric):
         if pr:
             print("Average Clustering Coefficient, <C> =", average_clustering)
 
-        return stats
+        return stats, average_clustering
