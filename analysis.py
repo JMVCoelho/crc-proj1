@@ -85,6 +85,7 @@ if directed:
     for c in scc:
         print(">>", c)
 
+
 # 6. Clustering coefficient
 edge_attribute_for_weight = None # it should be a string
 
@@ -194,6 +195,27 @@ if directed:
                       xticks = [0, 0.01, 0.02, 0.03, 0.04, 0.042], yticks = [0, 0.001], discrete=False) # FIXME boundaries
     plt.show()
 
+
+# 11. Betweeness Centrality
+edge_attribute_for_weight = None # it should be a string
+
+if directed:
+    betweeness_centrality = nx.betweenness_centrality(g, weight=edge_attribute_for_weight)
+    stats['Betweeness']  = [v for k, v in betweeness_centrality.items()]
+
+    # top 20 nodes with highest betweeness ranking
+    print(stats.sort_values(by='Betweeness', ascending=False).head(20))
+
+    # Distribution
+    distribution = stats.groupby(['Betweeness']).size().reset_index(name='Frequency')
+    sum = distribution['Frequency'].sum()
+    distribution['Probability'] = distribution['Frequency'] / sum
+
+    plots.create_plot("plots/businessProj_betweeness_distribution.pdf", "Betweenss centrality distribution",
+                      'Betweeness centrality value', distribution['Betweeness'],
+                       "Probability", distribution['Probability'],
+                      xticks = [0, 0.01, 0.02, 0.03, 0.04, 0.042], yticks = [0, 0.001], discrete=False) # FIXME boundaries
+    plt.show()
 
 
 
