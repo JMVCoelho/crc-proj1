@@ -14,7 +14,7 @@ class HarmonicCentrality(Metric):
     def compute(self, stats, name, pr=True):
 
         if not os.path.exists('pickle/' + name + 'harmonic_centrality.pickle'):
-            harmonic_centrality = nx.harmonic_centrality(self.graph)
+            harmonic_centrality = nx.harmonic_centrality(self.graph, distance=self.edge_attribute_for_weight)
             with open('pickle/' + name + 'harmonic_centrality.pickle', 'wb') as output:
                 pickle.dump(harmonic_centrality, output, pickle.HIGHEST_PROTOCOL)
 

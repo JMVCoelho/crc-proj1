@@ -41,6 +41,8 @@ def create_projections(bipartite_path: str, nodes_path: str, name: str):
     nodes = data.nodes.to_list()
 
     projection = nx.bipartite.weighted_projected_graph(B, nodes)
+    for edge in projection.edges.data():
+        edge[2]['dist'] = 1 / edge[2]['weight']
 
     if len(projection) > 0:
         nx.write_edgelist(projection, name + '.edges')
@@ -50,6 +52,8 @@ def create_projections(bipartite_path: str, nodes_path: str, name: str):
     return None
 
 
-create_projections('bipartite-user-business.edges', 'users-node-list.csv', 'user-projection')
-create_projections('bipartite-user-business.edges', 'business-node-list.csv', 'business-projection')
+
+create_projections('bipartite-user-business.edges', 'users-node-list.users', 'user-projection')
+#create_projections('bipartite-user-business.edges', 'business-node-list.business', 'business-projection')
+
 exit(0)
