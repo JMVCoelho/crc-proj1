@@ -12,7 +12,7 @@ class PageRankCentrality(Metric):
         super().__init__(graph, weighted, directed, edge_attribute_for_weight)
 
     def compute(self, stats, name, pr=True):
-        if self.directed:
+        if self.directed or not self.directed:
 
             if not os.path.exists('pickle/' + name + 'pagerank_centrality.pickle'):
                 pageRank_centrality = nx.pagerank(self.graph, alpha=0.85, weight=self.edge_attribute_for_weight)
@@ -41,4 +41,4 @@ class PageRankCentrality(Metric):
             if pr:
                 plt.show()
 
-            return stats
+        return stats
