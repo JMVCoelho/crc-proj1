@@ -15,8 +15,8 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
     ax = plt.subplot(2 if also_log_scale else 1, 1, 1)
     plt.scatter(xdata, ydata)
     plt.title(title + ' (linear scale)' if also_log_scale else '')
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
+    plt.xlabel(xlabel, fontsize=18)
+    plt.ylabel(ylabel, fontsize=18)
     ax.set_xscale('linear')
     ax.set_yscale('linear')
     if yticks:
@@ -25,6 +25,8 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
     if xticks:
         ax.set_xlim(xmin=xticks[0], xmax=xticks[len(xticks) - 1])
         ax.set_xticks(xticks)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
     plt.grid()
 
     # Plot in log scale
@@ -32,8 +34,8 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
         ax = plt.subplot(2, 1, 2)
         plt.scatter(xdata, ydata)
         plt.title(title + ' (log scale)')
-        plt.xlabel('log(' + xlabel + ')')
-        plt.ylabel('log(' + ylabel + ')')
+        plt.xlabel('log(' + xlabel + ')', fontsize=18)
+        plt.ylabel('log(' + ylabel + ')', fontsize=18)
         ax.set_xscale('log')
         ax.set_yscale('log')
         if log_yticks:
@@ -57,5 +59,22 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
     return
 
 
+def create_bar(path_to_save: str, title: str,
+               xlabel: str, xdata: list,
+               ylabel: str, ydata: list,
+               xbins:list = None, yticks: list = None):
 
-
+    fig = plt.figure()
+    fig.set_size_inches(10.0, 7.0)
+    ax = plt.subplot(1, 1, 1)
+    plt.bar(xdata, ydata)
+    plt.title(title)
+    plt.xlabel(xlabel, fontsize=18)
+    plt.ylabel(ylabel, fontsize=18)
+    ax.xaxis.set_ticks(xbins)
+    ax.yaxis.set_ticks(yticks)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.grid(True, axis='y')
+    fig.savefig(path_to_save)
+    return
