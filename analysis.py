@@ -12,14 +12,15 @@ from metrics.BetweenessCentrality import BetweennessCentrality
 from metrics.HarmonicCentrality import HarmonicCentrality
 from metrics.EdgeWeightsFrequency import EdgeWeightsFrequency
 from metrics.WeightedDegreeCentrality import WeightedDegreeCentrality
+from metrics.Communities import Communities
 
 import networkx as nx
 import pandas as pd
 import os
 
-file = "data/business-projection.edges"
-name = "business_projection"
-stats_path = "businessProj_stats.csv"
+file = "data/user-projection.edges"
+name = "user_projection_"
+stats_path = "userProj_stats.csv"
 _print = True
 
 
@@ -66,7 +67,7 @@ def analysis(path_to_graph, report_name, directed, weighted, bipartite,
         stats.columns = ['Node']
 
     else:
-        stats = pd.read_csv(stats_path)
+        stats = pd.read_csv(stats_path, index_col=0)
 
     # OPTIONAL ARGUMENTS FOR ALL compute(): weighted, directed, edge_attribute_for_weight. Default is false false none.
 
@@ -120,6 +121,7 @@ def analysis(path_to_graph, report_name, directed, weighted, bipartite,
 
     if communities:
         print("\nFinding communities...\n")
+        Communities(g, weighted=weighted, directed=directed).compute(stats=stats, name=report_name, pr=_print)
 
 
     if stats is not None:
@@ -137,18 +139,19 @@ def full_analysis(path_to_graph, report_name, directed, weighted):
 
 # OR
 
-analysis(file, name, weighted=False, directed=False, bipartite=False,
+analysis(file, name, weighted=True, directed=False, bipartite=False,
              edgeWeightsFrequency=False,
              degreeCentrality = False,
              weightedDegreeCentrality= False,
-             clusterCoefficient = True,
+             clusterCoefficient = False,
              apl = False,
              eigenvectorCentrality = False,
              katzCentrality = False,
              pagerankCentrality = False,
              betweennessCentrality = False,
              harmonicCentrality = False,
-             scc = False
+             scc = False,
+             communities = True,
          )
 
 
