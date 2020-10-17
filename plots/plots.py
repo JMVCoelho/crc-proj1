@@ -14,7 +14,7 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
     # Plot in linear scale
     ax = plt.subplot(2 if also_log_scale else 1, 1, 1)
     plt.scatter(xdata, ydata)
-    plt.title(title + ' (linear scale)' if also_log_scale else '')
+    #plt.title(title + ' (linear scale)' if also_log_scale else '')
     plt.xlabel(xlabel, fontsize=18)
     plt.ylabel(ylabel, fontsize=18)
     ax.set_xscale('linear')
@@ -29,11 +29,12 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
     plt.yticks(fontsize=16)
     plt.grid()
 
+
     # Plot in log scale
     if also_log_scale:
         ax = plt.subplot(2, 1, 2)
         plt.scatter(xdata, ydata)
-        plt.title(title + ' (log scale)')
+        #plt.title(title + ' (log scale)')
         plt.xlabel('log(' + xlabel + ')', fontsize=18)
         plt.ylabel('log(' + ylabel + ')', fontsize=18)
         ax.set_xscale('log')
@@ -44,6 +45,7 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
         ax.get_yaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
         plt.grid()
 
+
         # Plot power law
         if powerlaw_xmin and powerlaw_xmax:
             fit = powerlaw.Fit(xdata + 1, xmin=powerlaw_xmin, xmax=powerlaw_xmax, discrete=discrete)
@@ -52,10 +54,12 @@ def create_plot(path_to_save: str, title: str, xlabel: str, xdata: list, ylabel:
 
         fit.power_law.plot_pdf(color='r', linestyle='--', label='fit pdf')
 
-        fig.savefig(path_to_save)
+        fig.savefig(path_to_save, bbox_inches = 'tight',
+    pad_inches = 0)
         return fit.power_law.alpha
 
-    fig.savefig(path_to_save)
+    fig.savefig(path_to_save, bbox_inches = 'tight',
+    pad_inches = 0)
     return
 
 
@@ -76,5 +80,7 @@ def create_bar(path_to_save: str, title: str,
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
     plt.grid(True, axis='y')
-    fig.savefig(path_to_save)
+
+    fig.savefig(path_to_save, bbox_inches = 'tight',
+    pad_inches = 0)
     return
