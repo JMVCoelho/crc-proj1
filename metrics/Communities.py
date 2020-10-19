@@ -1,7 +1,9 @@
 from metrics.Metric import Metric
 
 import networkx as nx
+import pandas as pd
 import pickle
+import statistics
 import os
 
 
@@ -91,3 +93,38 @@ class Communities(Metric):
             for i in range(0, top):
                 name = community_names[i]
                 print(name, len(self.communities[name]))
+
+    def community_homogeneity(self, stats, name, community_name, ratings_path_file):
+        df = pd.read_csv(ratings_path_file, header=None, usecols=[0, 2], sep=' ')
+
+        def user_mode(user):
+            res_df = df[df[0] == user]
+            ratings = res_df[2].to_list()
+            try:
+                mode = statistics.mode(ratings)
+            except statistics.StatisticsError: # there is not exactly one most common value
+                mode = int(statistics.mean(ratings))
+            return mode
+
+        def community_ratings_stdev(_name):
+            modes = []
+            for _user in self.communities[_name]:
+                modes.append(user_mode(_user))
+            print("The ratings std deviation of", _name, "is", statistics.pstdev(modes))
+
+        if os.path.exists(name+ '_sorted_communities.pickle'):
+            with open(name + '_sorted_communities.pickle', 'rb') as dc:
+                self.communities = pickle.load(dc)
+        else:
+            self.compute(self, stats, name, False)
+
+        if isinstance(community_name, str) and community_name == "all":
+            community_names = list(self.communities.keys())
+            print("\n\nAll Communities:")
+            for _name in community_names:
+                community_ratings_stdev(_name)
+
+        else:
+            community_ratings_stdev(community_name)
+
+
